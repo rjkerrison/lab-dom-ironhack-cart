@@ -50,6 +50,36 @@ function removeProduct(e, productRowElement) {
 function createProduct() {
   //... your code goes here
   console.log('creating product');
+
+  const productRowElement = document.createElement('tr');
+
+  // PRODUCT NAME
+  const productNameCell = createProductCell(productRowElement);
+  productNameCell.innerHTML = '<span>Product Name/span>';
+  // UNIT PRICE
+  const unitPriceCell = createProductCell(productRowElement);
+  addPriceToCell(unitPriceCell, 10000);
+
+  const quantityCell = createProductCell(productRowElement);
+  // total PRICE
+  const totalPriceCell = createProductCell(productRowElement);
+  addPriceToCell(totalPriceCell);
+
+  const tbody = document.querySelector('table#cart tbody');
+  tbody.appendChild(productRowElement);
+}
+
+function addPriceToCell(cell, price = 0) {
+  const span = document.createElement('span');
+  span.textContent = price;
+  cell.textContent = '$';
+  cell.appendChild(span);
+}
+
+function createProductCell(productRowElement) {
+  const productCellElement = document.createElement('td');
+  productRowElement.appendChild(productCellElement);
+  return productCellElement;
 }
 
 window.addEventListener('load', () => {
