@@ -77,26 +77,27 @@ function addCellsToProductRow(productRowElement) {
   const options = getNewProductOptions();
 
   // PRODUCT NAME
-  const productNameCell = createProductCell(productRowElement);
-  productNameCell.classList.add('name');
-  productNameCell.innerHTML = options.name;
+  const productNameCell = createProductCell(productRowElement, 'name');
+  addTextCellToRow(productNameCell, options.name);
   // UNIT PRICE
-  const unitPriceCell = createProductCell(productRowElement);
-  unitPriceCell.classList.add('price');
+  const unitPriceCell = createProductCell(productRowElement, 'price');
   addPriceToCell(unitPriceCell, options.unitPrice);
   // QUANTITY
-  const quantityCell = createProductCell(productRowElement);
-  quantityCell.classList.add('quantity');
+  const quantityCell = createProductCell(productRowElement, 'quantity');
   addNumberInputToCell(quantityCell);
   // TOTAL PRICE
-  const totalPriceCell = createProductCell(productRowElement);
-  totalPriceCell.classList.add('subtotal');
-  addPriceToCell(totalPriceCell);
+  const totalPriceCell = createProductCell(productRowElement, 'subtotal');
+  addPriceToCell(totalPriceCell, 0);
 
   // remove button
-  const removeButtonCell = createProductCell(productRowElement);
-  removeButtonCell.classList.add('remove');
+  const removeButtonCell = createProductCell(productRowElement, 'remove');
   addRemoveButtonToCell(removeButtonCell);
+}
+
+function addTextCellToRow(cell, text) {
+  const span = document.createElement('span');
+  span.textContent = text;
+  cell.appendChild(span);
 }
 
 function addNumberInputToCell(cell) {
@@ -114,15 +115,17 @@ function addRemoveButtonToCell(cell) {
   cell.appendChild(button);
 }
 
-function addPriceToCell(cell, price = 0) {
+function addPriceToCell(cell, price, className) {
   const span = document.createElement('span');
   span.textContent = price.toFixed(2);
+
   cell.textContent = '$';
   cell.appendChild(span);
 }
 
-function createProductCell(productRowElement) {
+function createProductCell(productRowElement, className) {
   const productCellElement = document.createElement('td');
+  productCellElement.classList.add(className);
   productRowElement.appendChild(productCellElement);
   return productCellElement;
 }
