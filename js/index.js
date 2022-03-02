@@ -48,31 +48,55 @@ function removeProduct(e, productRowElement) {
 // ITERATION 5
 
 function createProduct() {
-  //... your code goes here
-  console.log('creating product');
-
+  // Create the row
   const productRowElement = document.createElement('tr');
   productRowElement.classList.add('product');
 
+  // Add the cells
+  addCellsToProductRow(productRowElement);
+
+  // Append the row
+  const tbody = document.querySelector('table#cart tbody');
+  tbody.appendChild(productRowElement);
+}
+
+function getNewProductOptions() {
+  const productNameInput = document.querySelector(
+    '.create-product input[type="text"]'
+  );
+  const unitPriceInput = document.querySelector(
+    '.create-product input[type="number"]'
+  );
+  return {
+    name: productNameInput.value,
+    unitPrice: parseFloat(unitPriceInput.value)
+  };
+}
+
+function addCellsToProductRow(productRowElement) {
+  const options = getNewProductOptions();
+
   // PRODUCT NAME
   const productNameCell = createProductCell(productRowElement);
-  productNameCell.innerHTML = '<span>Product Name/span>';
+  productNameCell.classList.add('name');
+  productNameCell.innerHTML = options.name;
   // UNIT PRICE
   const unitPriceCell = createProductCell(productRowElement);
-  addPriceToCell(unitPriceCell, 10000);
-
+  unitPriceCell.classList.add('price');
+  addPriceToCell(unitPriceCell, options.unitPrice);
+  // QUANTITY
   const quantityCell = createProductCell(productRowElement);
+  quantityCell.classList.add('quantity');
   addNumberInputToCell(quantityCell);
-  // total PRICE
+  // TOTAL PRICE
   const totalPriceCell = createProductCell(productRowElement);
+  totalPriceCell.classList.add('subtotal');
   addPriceToCell(totalPriceCell);
 
   // remove button
   const removeButtonCell = createProductCell(productRowElement);
+  removeButtonCell.classList.add('remove');
   addRemoveButtonToCell(removeButtonCell);
-
-  const tbody = document.querySelector('table#cart tbody');
-  tbody.appendChild(productRowElement);
 }
 
 function addNumberInputToCell(cell) {
@@ -92,7 +116,7 @@ function addRemoveButtonToCell(cell) {
 
 function addPriceToCell(cell, price = 0) {
   const span = document.createElement('span');
-  span.textContent = price;
+  span.textContent = price.toFixed(2);
   cell.textContent = '$';
   cell.appendChild(span);
 }
