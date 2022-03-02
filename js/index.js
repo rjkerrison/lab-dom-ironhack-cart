@@ -52,6 +52,7 @@ function createProduct() {
   console.log('creating product');
 
   const productRowElement = document.createElement('tr');
+  productRowElement.classList.add('product');
 
   // PRODUCT NAME
   const productNameCell = createProductCell(productRowElement);
@@ -61,12 +62,32 @@ function createProduct() {
   addPriceToCell(unitPriceCell, 10000);
 
   const quantityCell = createProductCell(productRowElement);
+  addNumberInputToCell(quantityCell);
   // total PRICE
   const totalPriceCell = createProductCell(productRowElement);
   addPriceToCell(totalPriceCell);
 
+  // remove button
+  const removeButtonCell = createProductCell(productRowElement);
+  addRemoveButtonToCell(removeButtonCell);
+
   const tbody = document.querySelector('table#cart tbody');
   tbody.appendChild(productRowElement);
+}
+
+function addNumberInputToCell(cell) {
+  const input = document.createElement('input');
+  input.setAttribute('type', 'number');
+  input.value = 0;
+  cell.appendChild(input);
+}
+
+function addRemoveButtonToCell(cell) {
+  const button = document.createElement('button');
+  button.classList.add('btn', 'btn-remove');
+  button.textContent = 'Remove';
+  attachRemoveEventListener(button);
+  cell.appendChild(button);
 }
 
 function addPriceToCell(cell, price = 0) {
@@ -82,19 +103,24 @@ function createProductCell(productRowElement) {
   return productCellElement;
 }
 
+function removeProductRow(removeButton) {
+  const productRowElement = removeButton.closest('tr.product');
+  productRowElement.remove();
+  // we will need to update the total
+  calculateAll();
+}
+
+const attachRemoveEventListener = (removeButton) => {
+  removeButton.addEventListener('click', () => removeProductRow(removeButton));
+};
+
 window.addEventListener('load', () => {
   const calculatePricesBtn = document.getElementById('calculate');
   calculatePricesBtn.addEventListener('click', calculateAll);
 
   const removeButtons = document.querySelectorAll('.btn-remove');
-  removeButtons.forEach((removeButton) => {
-    const productRowElement = removeButton.closest('tr.product');
-    removeButton.addEventListener('click', function (event) {
-      productRowElement.remove();
-      // we will need to update the total
-      calculateAll();
-    });
-  });
+  removeButtons.forEach(attachRemoveEventListener);
+
   const createButton = document.querySelector('button#create');
   createButton.addEventListener('click', createProduct);
   //... your code goes here
